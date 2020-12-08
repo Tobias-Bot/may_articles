@@ -15,18 +15,43 @@ class WriteArticle extends React.Component {
     this.state = {};
 
     this.createNewArticle = this.createNewArticle.bind(this);
+    this.StyleText = this.StyleText.bind(this);
   }
 
   componentDidMount() {}
 
-  createNewArticle() {
+  createNewArticle() {}
 
+  StyleText(style) {
+    document.execCommand(style, false, null);
   }
 
   render() {
-    return (<div>
-      <ArticlePage />
-    </div>);
+    return (
+      <div>
+        <div className="Header">
+          <button className="HeaderBtn" onClick={this.StyleText.bind(this, "bold")}>
+            <i className="fas fa-bold"></i>
+          </button>
+          <button className="HeaderBtn" onClick={this.StyleText.bind(this, "italic")}>
+            <i className="fas fa-italic"></i>
+          </button>
+          <button className="HeaderBtn" onClick={this.StyleText.bind(this, "underline")}>
+            <i className="fas fa-underline"></i>
+          </button>
+          <button className="HeaderBtn" onClick={this.StyleText.bind(this, "strikethrough")}>
+            <i className="fas fa-strikethrough"></i>
+          </button>
+          <button className="HeaderBtn" onClick={this.StyleText.bind(this, "insertUnorderedList")}>
+            <i className="fas fa-list-ul"></i>
+          </button>
+          <button className="HeaderBtn" onClick={this.StyleText.bind(this, "insertOrderedList")}>
+            <i className="fas fa-list-ol"></i>
+          </button>
+        </div>
+        <ArticlePage />
+      </div>
+    );
   }
 }
 

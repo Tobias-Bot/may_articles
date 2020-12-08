@@ -16,10 +16,21 @@ class ArticlePage extends React.Component {
   componentDidMount() {}
 
   render() {
-    return (<div className="ArticlePage">
-      <textarea type="text" className="ArticlePageTitle" rows="1" placeholder="Заголовок страницы"></textarea>
-      <div className="ArticlePageText" contentEditable="true"></div>
-    </div>);
+    return (
+      <div className="ArticlePage">
+        <textarea
+          type="text"
+          className="ArticlePageTitle"
+          rows="1"
+          placeholder="Заголовок страницы"
+        ></textarea>
+        <div
+          className="ArticlePageText"
+          contentEditable="true"
+          placeholder="Текст"
+        ></div>
+      </div>
+    );
   }
 }
 
