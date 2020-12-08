@@ -11,9 +11,19 @@ class ArticlePage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {};
+
+    this.DeleteStyles = this.DeleteStyles.bind(this);
   }
 
   componentDidMount() {}
+
+  DeleteStyles(event) {
+    event.preventDefault();
+    let text = (event.originalEvent || event).clipboardData.getData(
+      "text/plain"
+    );
+    document.execCommand("insertText", false, text);
+  }
 
   render() {
     return (
@@ -21,13 +31,14 @@ class ArticlePage extends React.Component {
         <textarea
           type="text"
           className="ArticlePageTitle"
-          rows="1"
-          placeholder="Заголовок страницы"
+          rows="2"
+          placeholder="Заголовок статьи"
         ></textarea>
         <div
           className="ArticlePageText"
           contentEditable="true"
           placeholder="Текст"
+          onPaste={this.DeleteStyles}
         ></div>
       </div>
     );

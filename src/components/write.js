@@ -23,30 +23,56 @@ class WriteArticle extends React.Component {
   createNewArticle() {}
 
   StyleText(style) {
-    document.execCommand(style, false, null);
+    if (style === "heading") {
+      document.execCommand("formatBlock", false, "h3");
+    } else document.execCommand(style, false, null);
   }
 
   render() {
     return (
       <div>
         <div className="Header">
-          <button className="HeaderBtn" onClick={this.StyleText.bind(this, "bold")}>
+          <button
+            className="HeaderBtn"
+            onClick={this.StyleText.bind(this, "bold")}
+          >
             <i className="fas fa-bold"></i>
           </button>
-          <button className="HeaderBtn" onClick={this.StyleText.bind(this, "italic")}>
+          <button
+            className="HeaderBtn"
+            onClick={this.StyleText.bind(this, "italic")}
+          >
             <i className="fas fa-italic"></i>
           </button>
-          <button className="HeaderBtn" onClick={this.StyleText.bind(this, "underline")}>
+          <button
+            className="HeaderBtn"
+            onClick={this.StyleText.bind(this, "underline")}
+          >
             <i className="fas fa-underline"></i>
           </button>
-          <button className="HeaderBtn" onClick={this.StyleText.bind(this, "strikethrough")}>
+          <button
+            className="HeaderBtn"
+            onClick={this.StyleText.bind(this, "strikethrough")}
+          >
             <i className="fas fa-strikethrough"></i>
           </button>
-          <button className="HeaderBtn" onClick={this.StyleText.bind(this, "insertUnorderedList")}>
+          <button
+            className="HeaderBtn"
+            onClick={this.StyleText.bind(this, "insertUnorderedList")}
+          >
             <i className="fas fa-list-ul"></i>
           </button>
-          <button className="HeaderBtn" onClick={this.StyleText.bind(this, "insertOrderedList")}>
+          <button
+            className="HeaderBtn"
+            onClick={this.StyleText.bind(this, "insertOrderedList")}
+          >
             <i className="fas fa-list-ol"></i>
+          </button>
+          <button
+            className="HeaderBtn"
+            onClick={this.StyleText.bind(this, "heading")}
+          >
+            <i className="fas fa-heading"></i>
           </button>
         </div>
         <ArticlePage />
