@@ -18,7 +18,7 @@ class WriteArticle extends React.Component {
       articleColor: "white",
     };
 
-    this.maxLetters = 3600;
+    this.maxLetters = 3550;
 
     this.setProgress = this.setProgress.bind(this);
     this.StyleText = this.StyleText.bind(this);
@@ -59,6 +59,32 @@ class WriteArticle extends React.Component {
 
   setArticleColor(articleColor) {
     this.setState({ articleColor });
+  }
+
+  updateArticle(obj, len) {
+    if (len % 10 === 0) {
+      let openRequest = indexedDB.open(obj.store, 1);
+
+      openRequest.onupgradeneeded = () => {
+        let DB = openRequest.result;
+        if (!DB.objectStoreNames.contains(obj.store)) {
+          DB.createObjectStore(obj.store);
+        }
+      };
+
+      openRequest.onerror = function () {
+        console.error("Can't create DB", openRequest.error);
+      };
+
+      openRequest.onsuccess = () => {
+        let DB = openRequest.result;
+
+        let tx = DB.transaction(obj.store, "readwrite");
+        let store = tx.objectStore(obj.store);
+
+        store.put(obj.data, obj.key);
+      };
+    }
   }
 
   render() {
@@ -155,7 +181,10 @@ class WriteArticle extends React.Component {
           <div
             className="progress-bar progress-bar-striped progress-bar-animated"
             role="progressbar"
-            style={{ width: this.state.progress + "%", backgroundColor: "#ffdef0" }}
+            style={{
+              width: this.state.progress + "%",
+              backgroundColor: "#ffdef0",
+            }}
           ></div>
         </div>
 
@@ -165,10 +194,13 @@ class WriteArticle extends React.Component {
             progress={this.state.progress}
             articles={this.props.articles}
             onProgress={this.setProgress}
+            onArticleSave={this.updateArticle}
           />
         </div>
 
-        <div className="Footer">завершенность статьи: {Math.round(this.state.progress) + "%"}</div>
+        <div className="Footer">
+          завершенность статьи: {Math.round(this.state.progress) + "%"}
+        </div>
       </div>
     );
   }

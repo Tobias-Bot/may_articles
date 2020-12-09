@@ -10,7 +10,14 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      articles: [],
     };
+
+    this.setArticles = this.setArticles.bind(this);
+  }
+
+  setArticles(articles) {
+    this.setState({articles});
   }
 
   render() {
@@ -19,7 +26,7 @@ class App extends React.Component {
         <HashRouter>
           <Switch>
             <Route exact path="/">
-              <Main />
+              <Main onArticlesLoad={this.setArticles} />
             </Route>
             <Route path="/write">
               <WriteArticle articles={this.state.articles} />

@@ -51,7 +51,9 @@ class Main extends React.Component {
 
       tx.oncomplete = () => {
         if (articles.result) {
-          this.setState({ articles: articles.result });
+          this.setState({ articles: articles.result }, () => {
+            this.props.onArticlesLoad(articles.result);
+          });
         }
       };
     };
