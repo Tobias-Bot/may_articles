@@ -1,3 +1,4 @@
+import React from "react";
 import { HashRouter, Switch, Route } from "react-router-dom";
 
 import "./App.css";
@@ -5,21 +6,29 @@ import "./App.css";
 import Main from "./components/main";
 import WriteArticle from "./components/write";
 
-function App() {
-  return (
-    <div className="App">
-      <HashRouter>
-        <Switch>
-          <Route exact path="/">
-            <Main />
-          </Route>
-          <Route path="/write">
-            <WriteArticle />
-          </Route>
-        </Switch>
-      </HashRouter>
-    </div>
-  );
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+    };
+  }
+
+  render() {
+    return (
+      <div className="App">
+        <HashRouter>
+          <Switch>
+            <Route exact path="/">
+              <Main />
+            </Route>
+            <Route path="/write">
+              <WriteArticle articles={this.state.articles} />
+            </Route>
+          </Switch>
+        </HashRouter>
+      </div>
+    );
+  }
 }
 
 export default App;

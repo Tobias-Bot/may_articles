@@ -76,9 +76,7 @@ class WriteArticle extends React.Component {
           <div className="modal-dialog">
             <div className="modal-content">
               <div className="modal-header">
-                <h5 className="modal-title">
-                  Цвет статьи
-                </h5>
+                <h5 className="modal-title">Цвет статьи</h5>
                 <button
                   type="button"
                   className="close"
@@ -88,7 +86,9 @@ class WriteArticle extends React.Component {
                   <span aria-hidden="true">&times;</span>
                 </button>
               </div>
-              <div className="modal-body" style={{textAlign: "center"}}>{colors}</div>
+              <div className="modal-body" style={{ textAlign: "center" }}>
+                {colors}
+              </div>
             </div>
           </div>
         </div>
@@ -153,16 +153,22 @@ class WriteArticle extends React.Component {
 
         <div className="progress progressBar">
           <div
-            className="progress-bar bg-info progress-bar-striped progress-bar-animated"
+            className="progress-bar progress-bar-striped progress-bar-animated"
             role="progressbar"
-            style={{ width: this.state.progress + "%" }}
+            style={{ width: this.state.progress + "%", backgroundColor: "#ffdef0" }}
           ></div>
         </div>
 
-        <ArticlePage
-          color={this.state.articleColor}
-          onProgress={this.setProgress}
-        />
+        <div className="Body">
+          <ArticlePage
+            color={this.state.articleColor}
+            progress={this.state.progress}
+            articles={this.props.articles}
+            onProgress={this.setProgress}
+          />
+        </div>
+
+        <div className="Footer">завершенность статьи: {Math.round(this.state.progress) + "%"}</div>
       </div>
     );
   }
