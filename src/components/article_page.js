@@ -20,6 +20,17 @@ class ArticlePage extends React.Component {
     this.updateArticle = this.updateArticle.bind(this);
   }
 
+  componentDidMount() {
+    let article = this.props.currArticle;
+
+    if (article.title) {
+      this.TitleRef.current.value = article.title;
+    }
+
+    if (article.text) {
+      this.TextRef.current.innerHTML = article.text;
+    }
+  }
 
   DeleteStyles(event) {
     event.preventDefault();
@@ -39,20 +50,28 @@ class ArticlePage extends React.Component {
 
   updateArticle() {
     let title = this.TitleRef.current.value;
-    let text = this.TextRef.current.innerText;
-    let progress = this.props.progress;
-    let color = this.props.color;
+    let text = this.TextRef.current.innerHTML;
+    let progress = this.props.currArticle.progress;
+    let color = this.props.currArticle.color;
+    let fresh = this.props.currArticle.fresh;
+    let id = this.props.currArticle.id;
     let articles = this.props.articles;
     let len = text.length;
 
-    let data = {
+    let i = articles.findIndex((article) => article.id === id);
+
+    if (i === -1) {
+      i = 0;
+    }
+
+    articles[i] = {
+      id,
       title,
       text,
       progress,
       color,
+      fresh,
     };
-
-    articles.unshift(data);
 
     let obj = {
       store: "may-articles",
@@ -64,11 +83,13 @@ class ArticlePage extends React.Component {
   }
 
   render() {
+    let article = this.props.currArticle;
+
     return (
       <div>
         <div
           className="ArticlePage"
-          style={{ backgroundColor: this.props.color }}
+          style={{ backgroundColor: article.color }}
         >
           <textarea
             type="text"

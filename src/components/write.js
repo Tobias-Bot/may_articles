@@ -3,7 +3,7 @@ import React from "react";
 // import * as firebase from "firebase/app";
 // import "firebase/database";
 
-// import { NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 import ArticlePage from "./article_page";
 
@@ -14,8 +14,7 @@ class WriteArticle extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      progress: 0,
-      articleColor: "white",
+      article: this.props.currArticle,
     };
 
     this.maxLetters = 3550;
@@ -30,8 +29,11 @@ class WriteArticle extends React.Component {
 
   setProgress(len) {
     let progress = (len * 100) / this.maxLetters;
+    let article = this.state.article;
 
-    this.setState({ progress });
+    article.progress = progress;
+
+    this.setState({ article });
   }
 
   StyleText(style) {
@@ -58,7 +60,10 @@ class WriteArticle extends React.Component {
   }
 
   setArticleColor(articleColor) {
-    this.setState({ articleColor });
+    let article = this.state.article;
+
+    article.color = articleColor;
+    this.setState({ article });
   }
 
   updateArticle(obj, len) {
@@ -120,6 +125,11 @@ class WriteArticle extends React.Component {
         </div>
 
         <div className="Header">
+          <NavLink to="/">
+            <button className="HeaderBtn">
+              <i className="fas fa-home"></i>
+            </button>
+          </NavLink>
           <button
             className="HeaderBtn"
             onClick={this.StyleText.bind(this, "bold")}
@@ -182,7 +192,7 @@ class WriteArticle extends React.Component {
             className="progress-bar progress-bar-striped progress-bar-animated"
             role="progressbar"
             style={{
-              width: this.state.progress + "%",
+              width: this.state.article.progress + "%",
               backgroundColor: "#ffdef0",
             }}
           ></div>
@@ -190,8 +200,7 @@ class WriteArticle extends React.Component {
 
         <div className="Body">
           <ArticlePage
-            color={this.state.articleColor}
-            progress={this.state.progress}
+            currArticle={this.state.article}
             articles={this.props.articles}
             onProgress={this.setProgress}
             onArticleSave={this.updateArticle}
@@ -199,7 +208,7 @@ class WriteArticle extends React.Component {
         </div>
 
         <div className="Footer">
-          завершенность статьи: {Math.round(this.state.progress) + "%"}
+          завершенность статьи: {Math.round(this.state.article.progress) + "%"}
         </div>
       </div>
     );

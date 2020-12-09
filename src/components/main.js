@@ -7,6 +7,8 @@ import { NavLink } from "react-router-dom";
 
 import ArticleView from "./article_view";
 
+import "../App.css";
+
 class Main extends React.Component {
   constructor(props) {
     super(props);
@@ -16,6 +18,8 @@ class Main extends React.Component {
 
     this.getSavedArticles = this.getSavedArticles.bind(this);
     this.getPosts = this.getPosts.bind(this);
+    this.setCurrArticle = this.setCurrArticle.bind(this);
+    this.setNewCurrArticle = this.setNewCurrArticle.bind(this);
   }
 
   componentDidMount() {
@@ -59,15 +63,42 @@ class Main extends React.Component {
     };
   }
 
+  setNewCurrArticle(article) {
+    console.log(article);
+    this.props.onArticleCreate(article);
+  }
+
   getPosts() {
     let response = [];
     let articles = this.state.articles;
 
     response = articles.map((article, i) => {
-      return <ArticleView key={article.title + i} article={article} />;
+      return (
+        <ArticleView
+          key={article.title + i}
+          article={article}
+          onCurrArticle={this.setNewCurrArticle}
+        />
+      );
     });
 
     return response;
+  }
+
+  setCurrArticle() {
+    let len = this.state.articles.length;
+    let id = len ? len + 1 : 0;
+
+    let currentArticle = {
+      id,
+      title: "",
+      text: "",
+      progress: 0,
+      color: "white",
+      fresh: true,
+    };
+
+    this.props.onArticleCreate(currentArticle);
   }
 
   render() {
@@ -75,10 +106,16 @@ class Main extends React.Component {
 
     return (
       <div>
-        {posts}
-        <NavLink to="/write">
-          <button>создать статью</button>
-        </NavLink>
+        <div className="HeaderMain">
+          <NavLink to="/write">
+            <button className="headerMainBtn" onClick={this.setCurrArticle}>
+              <i className="fas fa-edit"></i>
+              создать статью
+            </button>
+          </NavLink>
+        </div>
+
+        <div className="BodyMain">{posts}</div>
       </div>
     );
   }
