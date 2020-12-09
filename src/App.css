@@ -1,2 +1,7 @@
-.App {
+body {
+  padding-bottom: 20px;
+  -webkit-overflow-scrolling: touch;
+  overflow: hidden;
+  overflow-y: scroll;
+  background-color: rgba(0, 0, 0, 0.9);
 }

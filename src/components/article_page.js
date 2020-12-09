@@ -12,7 +12,10 @@ class ArticlePage extends React.Component {
     super(props);
     this.state = {};
 
+    this.TextRef = React.createRef();
+
     this.DeleteStyles = this.DeleteStyles.bind(this);
+    this.setProgress = this.setProgress.bind(this);
   }
 
   componentDidMount() {}
@@ -25,21 +28,32 @@ class ArticlePage extends React.Component {
     document.execCommand("insertText", false, text);
   }
 
+  setProgress() {
+    let text = this.TextRef.current.innerText;
+    let len = text.length;
+
+    this.props.onProgress(len);
+  }
+
   render() {
     return (
-      <div className="ArticlePage">
-        <textarea
-          type="text"
-          className="ArticlePageTitle"
-          rows="2"
-          placeholder="Заголовок статьи"
-        ></textarea>
-        <div
-          className="ArticlePageText"
-          contentEditable="true"
-          placeholder="Текст"
-          onPaste={this.DeleteStyles}
-        ></div>
+      <div>
+        <div className="ArticlePage" style={{backgroundColor: this.props.color}}>
+          <textarea
+            type="text"
+            className="ArticlePageTitle"
+            rows="2"
+            placeholder="Заголовок статьи"
+          ></textarea>
+          <div
+            className="ArticlePageText"
+            contentEditable="true"
+            placeholder="Текст"
+            ref={this.TextRef}
+            onPaste={this.DeleteStyles}
+            onInput={this.setProgress}
+          ></div>
+        </div>
       </div>
     );
   }
