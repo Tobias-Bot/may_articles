@@ -20,6 +20,9 @@ class Main extends React.Component {
     this.getPosts = this.getPosts.bind(this);
     this.setCurrArticle = this.setCurrArticle.bind(this);
     this.setNewCurrArticle = this.setNewCurrArticle.bind(this);
+    this.deleteArticle = this.deleteArticle.bind(this);
+    this.updateArticles = this.updateArticles.bind(this);
+    this.submitPost = this.submitPost.bind(this);
   }
 
   componentDidMount() {
@@ -64,7 +67,6 @@ class Main extends React.Component {
   }
 
   setNewCurrArticle(article) {
-    console.log(article);
     this.props.onArticleCreate(article);
   }
 
@@ -78,6 +80,8 @@ class Main extends React.Component {
           key={article.title + i}
           article={article}
           onCurrArticle={this.setNewCurrArticle}
+          onArticleDelete={this.deleteArticle}
+          onArticleSubmit={this.submitPost}
         />
       );
     });
@@ -86,8 +90,8 @@ class Main extends React.Component {
   }
 
   setCurrArticle() {
-    let len = this.state.articles.length;
-    let id = len ? len + 1 : 0;
+    let articles = this.state.articles;
+    let id = articles.length;
 
     let currentArticle = {
       id,
@@ -95,14 +99,82 @@ class Main extends React.Component {
       text: "",
       progress: 0,
       color: "white",
-      fresh: true,
     };
 
+    articles.push(currentArticle);
+
+    this.props.onArticlesLoad(articles);
     this.props.onArticleCreate(currentArticle);
+  }
+
+  deleteArticle(id) {
+    let articles = this.state.articles;
+
+    articles.splice(id, 1);
+
+    for (let i = id; i < articles.length; i++) {
+      articles[i].id--;
+    }
+
+    this.setState({ articles });
+    this.props.onArticlesLoad(articles);
+    this.updateArticles({
+      store: "may-articles",
+      key: "articles",
+      data: articles,
+    });
+  }
+
+  updateArticles(obj) {
+    let openRequest = indexedDB.open(obj.store, 1);
+
+    openRequest.onupgradeneeded = () => {
+      let DB = openRequest.result;
+      if (!DB.objectStoreNames.contains(obj.store)) {
+        DB.createObjectStore(obj.store);
+      }
+    };
+
+    openRequest.onerror = function () {
+      console.error("Can't create DB", openRequest.error);
+    };
+
+    openRequest.onsuccess = () => {
+      let DB = openRequest.result;
+
+      let tx = DB.transaction(obj.store, "readwrite");
+      let store = tx.objectStore(obj.store);
+
+      store.put(obj.data, obj.key);
+    };
+  }
+
+  submitPost(id) {
+    let postId = firebase.database().ref().child("articles").push().key;
+    let data = this.state.articles[id];
+
+    let article = {
+      title: data.title,
+      text: data.text,
+      color: data.color,
+    }
+
+    firebase
+      .database()
+      .ref("articles/article" + postId)
+      .set(article);
   }
 
   render() {
     let posts = this.getPosts();
+
+    let posts1 = [];
+    let posts2 = [];
+
+    for (let i = 0; i < posts.length; i++) {
+      if (i % 2 === 0) posts1.push(posts[i]);
+      else posts2.push(posts[i]);
+    }
 
     return (
       <div>
@@ -115,7 +187,12 @@ class Main extends React.Component {
           </NavLink>
         </div>
 
-        <div className="BodyMain">{posts}</div>
+        <div className="BodyMain">
+          <div className="row">
+            <div className="col">{posts1}</div>
+            <div className="col">{posts2}</div>
+          </div>
+        </div>
       </div>
     );
   }

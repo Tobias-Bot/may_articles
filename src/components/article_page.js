@@ -53,24 +53,19 @@ class ArticlePage extends React.Component {
     let text = this.TextRef.current.innerHTML;
     let progress = this.props.currArticle.progress;
     let color = this.props.currArticle.color;
-    let fresh = this.props.currArticle.fresh;
     let id = this.props.currArticle.id;
     let articles = this.props.articles;
-    let len = text.length;
 
-    let i = articles.findIndex((article) => article.id === id);
-
-    if (i === -1) {
-      i = 0;
+    if (!id) {
+      id = 0;
     }
 
-    articles[i] = {
+    articles[id] = {
       id,
       title,
       text,
       progress,
       color,
-      fresh,
     };
 
     let obj = {
@@ -79,7 +74,7 @@ class ArticlePage extends React.Component {
       data: articles,
     };
 
-    this.props.onArticleSave(obj, len);
+    this.props.onArticleSave(obj);
   }
 
   render() {
@@ -97,6 +92,7 @@ class ArticlePage extends React.Component {
             rows="2"
             ref={this.TitleRef}
             placeholder="Заголовок статьи"
+            onChange={this.updateArticle}
           ></textarea>
           <div
             className="ArticlePageText"

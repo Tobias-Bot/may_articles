@@ -60,36 +60,43 @@ class WriteArticle extends React.Component {
   }
 
   setArticleColor(articleColor) {
-    let article = this.state.article;
+    let posts = this.props.articles;
+    let id = this.state.article.id;
 
-    article.color = articleColor;
-    this.setState({ article });
+    posts[id].color = articleColor;
+    this.setState({article: posts[id]});
+    
+    let obj = {
+      store: "may-articles",
+      key: "articles",
+      data: posts
+    }
+
+    this.updateArticle(obj);
   }
 
-  updateArticle(obj, len) {
-    if (len % 10 === 0) {
-      let openRequest = indexedDB.open(obj.store, 1);
+  updateArticle(obj) {
+    let openRequest = indexedDB.open(obj.store, 1);
 
-      openRequest.onupgradeneeded = () => {
-        let DB = openRequest.result;
-        if (!DB.objectStoreNames.contains(obj.store)) {
-          DB.createObjectStore(obj.store);
-        }
-      };
+    openRequest.onupgradeneeded = () => {
+      let DB = openRequest.result;
+      if (!DB.objectStoreNames.contains(obj.store)) {
+        DB.createObjectStore(obj.store);
+      }
+    };
 
-      openRequest.onerror = function () {
-        console.error("Can't create DB", openRequest.error);
-      };
+    openRequest.onerror = function () {
+      console.error("Can't create DB", openRequest.error);
+    };
 
-      openRequest.onsuccess = () => {
-        let DB = openRequest.result;
+    openRequest.onsuccess = () => {
+      let DB = openRequest.result;
 
-        let tx = DB.transaction(obj.store, "readwrite");
-        let store = tx.objectStore(obj.store);
+      let tx = DB.transaction(obj.store, "readwrite");
+      let store = tx.objectStore(obj.store);
 
-        store.put(obj.data, obj.key);
-      };
-    }
+      store.put(obj.data, obj.key);
+    };
   }
 
   render() {
