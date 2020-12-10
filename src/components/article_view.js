@@ -10,7 +10,7 @@ class ArticleView extends React.Component {
       articles: [],
     };
 
-    this.submitProgress = 0;
+    this.submitProgress = 99;
 
     this.setCurrArticle = this.setCurrArticle.bind(this);
     this.deleteArticle = this.deleteArticle.bind(this);

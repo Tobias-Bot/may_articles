@@ -64,13 +64,13 @@ class WriteArticle extends React.Component {
     let id = this.state.article.id;
 
     posts[id].color = articleColor;
-    this.setState({article: posts[id]});
-    
+    this.setState({ article: posts[id] });
+
     let obj = {
       store: "may-articles",
       key: "articles",
-      data: posts
-    }
+      data: posts,
+    };
 
     this.updateArticle(obj);
   }
@@ -155,12 +155,12 @@ class WriteArticle extends React.Component {
           >
             <i className="fas fa-underline"></i>
           </button>
-          <button
+          {/* <button
             className="HeaderBtn"
             onClick={this.StyleText.bind(this, "strikethrough")}
           >
             <i className="fas fa-strikethrough"></i>
-          </button>
+          </button> */}
           <button
             className="HeaderBtn"
             onClick={this.StyleText.bind(this, "insertUnorderedList")}
@@ -173,18 +173,6 @@ class WriteArticle extends React.Component {
           >
             <i className="fas fa-list-ol"></i>
           </button>
-          {/* <button
-            className="HeaderBtn"
-            onClick={() => document.execCommand("fontSize", false, "5")}
-          >
-            <i className="fas fa-heading"></i>
-          </button>
-          <button
-            className="HeaderBtn"
-            onClick={() => document.execCommand("fontSize", false, "3")}
-          >
-            <i className="fas fa-marker"></i>
-          </button> */}
           <button
             className="HeaderBtn"
             data-toggle="modal"

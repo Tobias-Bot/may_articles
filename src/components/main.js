@@ -182,7 +182,7 @@ class Main extends React.Component {
       .ref("articles/article" + postId)
       .set(article);
 
-    // this.deleteArticle(id);
+    this.deleteArticle(id);
 
     this.deleteArticleId = -1;
   }
