@@ -78,7 +78,12 @@ class ArticleView extends React.Component {
               ></div>
             </div>
           ) : (
-            <button className="submitPostBtn" onClick={this.submitArticle}>
+            <button
+              className="submitPostBtn"
+              onClick={this.submitArticle}
+              data-toggle="modal"
+              data-target="#submitModal"
+            >
               опубликовать
             </button>
           )}

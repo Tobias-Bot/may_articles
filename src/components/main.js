@@ -16,6 +16,18 @@ class Main extends React.Component {
       articles: [],
     };
 
+    this.ModalRef = React.createRef();
+
+    this.deleteArticleId = -1;
+    this.submissionText = `
+      Пожалуйста, проверьте статью перед публикацией.
+      Изменить ее содержимое после отправки будет невозможно.
+      <br />
+      <br />
+      Ваша статья будет опубликована на стене сообщества Май
+      в ближайшие дни после проверки администрацией.
+    `;
+
     this.getSavedArticles = this.getSavedArticles.bind(this);
     this.getPosts = this.getPosts.bind(this);
     this.setCurrArticle = this.setCurrArticle.bind(this);
@@ -23,6 +35,7 @@ class Main extends React.Component {
     this.deleteArticle = this.deleteArticle.bind(this);
     this.updateArticles = this.updateArticles.bind(this);
     this.submitPost = this.submitPost.bind(this);
+    this.confirmSubmission = this.confirmSubmission.bind(this);
   }
 
   componentDidMount() {
@@ -81,7 +94,7 @@ class Main extends React.Component {
           article={article}
           onCurrArticle={this.setNewCurrArticle}
           onArticleDelete={this.deleteArticle}
-          onArticleSubmit={this.submitPost}
+          onArticleSubmit={this.confirmSubmission}
         />
       );
     });
@@ -149,7 +162,12 @@ class Main extends React.Component {
     };
   }
 
-  submitPost(id) {
+  confirmSubmission(id) {
+    this.deleteArticleId = id;
+  }
+
+  submitPost() {
+    let id = this.deleteArticleId;
     let postId = firebase.database().ref().child("articles").push().key;
     let data = this.state.articles[id];
 
@@ -157,12 +175,16 @@ class Main extends React.Component {
       title: data.title,
       text: data.text,
       color: data.color,
-    }
+    };
 
     firebase
       .database()
       .ref("articles/article" + postId)
       .set(article);
+
+    // this.deleteArticle(id);
+
+    this.deleteArticleId = -1;
   }
 
   render() {
@@ -178,6 +200,49 @@ class Main extends React.Component {
 
     return (
       <div>
+        <div
+          className="modal fade"
+          id="submitModal"
+          tabIndex="-1"
+          role="dialog"
+          aria-hidden="true"
+          ref={this.ModalRef}
+        >
+          <div className="modal-dialog">
+            <div className="modal-content">
+              <div className="modal-header">
+                <button
+                  type="button"
+                  className="close"
+                  data-dismiss="modal"
+                  aria-label="Close"
+                >
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div className="modal-body" style={{ textAlign: "center" }}>
+                <div style={{ fontSize: "40px", color: "rgba(0, 0, 0, 0.7)" }}>
+                  <i className="fas fa-paper-plane"></i>
+                </div>
+                <br />
+                <br />
+                <div
+                  className="submissionText"
+                  dangerouslySetInnerHTML={{ __html: this.submissionText }}
+                ></div>
+                <br />
+                <button
+                  className="confirmSubmitBtn"
+                  data-dismiss="modal"
+                  onClick={this.submitPost}
+                >
+                  опубликовать
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div className="HeaderMain">
           <NavLink to="/write">
             <button className="headerMainBtn" onClick={this.setCurrArticle}>

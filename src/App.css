@@ -158,3 +158,30 @@ body {
   background-color: #ff77bf;
   outline: none;
 }
+
+.confirmSubmitBtn {
+  position: relative;
+  display: inline;
+  font-weight: 500;
+  font-size: 22px;
+  padding: 0px 15px 3px 15px;
+  border-radius: 6px;
+  color: #ffdef0;
+  outline: none;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+  border: 2px solid #ff60b5;
+  background-color: rgb(8, 0, 5);
+}
+.confirmSubmitBtn:active,
+.confirmSubmitBtn:focus {
+  cursor: pointer;
+  color: rgba(0, 0, 0, 0.9);
+  background-color: #ff77bf;
+  outline: none;
+}
+
+.submissionText {
+  font-size: 18px;
+  color:rgba(0, 0, 0, 0.9);
+  font-weight: 500;
+}
