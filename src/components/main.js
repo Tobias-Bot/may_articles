@@ -14,6 +14,9 @@ class Main extends React.Component {
     super(props);
     this.state = {
       articles: [],
+
+      username: "",
+      userurl: "",
     };
 
     this.ModalRef = React.createRef();
@@ -27,6 +30,47 @@ class Main extends React.Component {
       Ваша статья будет опубликована на стене сообщества Май
       в ближайшие дни после проверки администрацией.
     `;
+    this.userText = `
+      Пожалуйста, введите ваше имя или псевдоним, чтобы мы могли указать автора
+      статьи. По желанию можно указать ссылку на свою личную страницу или
+      группу-блог Вконтакте. Если данные не указаны, статьи будут публиковаться
+      анонимно.
+    `;
+    this.infoText = `
+      <h4>Рекомендации к написанию статей</h4>
+      1. Тематика публикации не должна сильно отличаться от постов в сообществе Май.
+      Темы, на которые следует ориентироваться, могут быть следующие: саморазвитие,
+      забота о себе, мотивация, ментальное или физическое здоровье, психология и подобное.
+      Статьи не соответствующие тематике сообщества не будут опубликованы на стене сообщества.
+      <br />
+      <br />
+      2. Так как объем публикаций достаточно небольшой, рекомендуем выделять
+      основные мысли, писать в первую очередь о том, что действительно
+      необходимо упомянуть.
+      <br />
+      <br />
+      3. Разделяйте текст статьи на отдельные абзацы и используйте заголовки
+      для каждой части. В таком формате людям легче воспринимать информацию,
+      чем читать сплошной текст.
+      <br />
+      <br />
+      4. Выделяйте слова или словосочетания с помощью стилей там, где это
+      уместно, для комфортного чтения текста.
+      <br />
+      <br />
+      <h4>Объем публикаций</h4>
+      Полоса прогресса в редакторе показывает текущий объем статьи. Для публикации
+      необходимо, чтобы объем статьи составлял > 99%. В этом случае полоса прогресса
+      будет полностью заполнена, и вы сможете опубликовать статью. Максимальный объем
+      статьи не должен превышать 120%.
+      <br />
+      <br />
+      <h4>Авторство</h4>
+      Имя автора и ссылка на него указываются в комментариях под постом и не удаляются.
+      В качестве ссылки на автора принимаются только ресурсы Вконтакте, например,
+      ваша личная страница или группа-блог. Если данные об авторе не указаны, статья
+      будет опубликована анонимно.
+    `;
 
     this.getSavedArticles = this.getSavedArticles.bind(this);
     this.getPosts = this.getPosts.bind(this);
@@ -36,6 +80,8 @@ class Main extends React.Component {
     this.updateArticles = this.updateArticles.bind(this);
     this.submitPost = this.submitPost.bind(this);
     this.confirmSubmission = this.confirmSubmission.bind(this);
+    this.setUsername = this.setUsername.bind(this);
+    this.setUserUrl = this.setUserUrl.bind(this);
   }
 
   componentDidMount() {
@@ -45,6 +91,17 @@ class Main extends React.Component {
     };
 
     this.getSavedArticles(obj);
+
+    let username = localStorage.getItem("may-username");
+    let userurl = localStorage.getItem("may-userurl");
+
+    if (!username) username = "";
+    if (!userurl) userurl = "";
+
+    this.setState({
+      username,
+      userurl,
+    });
   }
 
   getSavedArticles(obj) {
@@ -171,10 +228,15 @@ class Main extends React.Component {
     let postId = firebase.database().ref().child("articles").push().key;
     let data = this.state.articles[id];
 
+    let username = localStorage.getItem("may-username");
+    let userurl = localStorage.getItem("may-userurl");
+
     let article = {
       title: data.title,
       text: data.text,
       color: data.color,
+      username,
+      userurl,
     };
 
     firebase
@@ -185,6 +247,20 @@ class Main extends React.Component {
     this.deleteArticle(id);
 
     this.deleteArticleId = -1;
+  }
+
+  setUsername(e) {
+    let name = e.target.value;
+
+    localStorage.setItem("may-username", name);
+    this.setState({ username: name });
+  }
+
+  setUserUrl(e) {
+    let url = e.target.value;
+
+    localStorage.setItem("may-userurl", url);
+    this.setState({ userurl: url });
   }
 
   render() {
@@ -202,15 +278,65 @@ class Main extends React.Component {
       <div>
         <div
           className="modal fade"
+          id="userModal"
+          tabIndex="-1"
+          role="dialog"
+          aria-hidden="true"
+        >
+          <div className="modal-dialog modal-dialog-scrollable">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5>Автор публикаций</h5>
+                <button
+                  type="button"
+                  className="close"
+                  data-dismiss="modal"
+                  aria-label="Close"
+                >
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div className="modal-body" style={{ textAlign: "center" }}>
+                <input
+                  className="userInput"
+                  type="text"
+                  value={this.state.username}
+                  placeholder="Имя или псевдоним"
+                  onChange={this.setUsername}
+                />
+                <input
+                  className="userInput"
+                  type="text"
+                  value={this.state.userurl}
+                  placeholder="Ссылка на автора"
+                  onChange={this.setUserUrl}
+                />
+                <br />
+                <br />
+                <div
+                  className="submissionText"
+                  dangerouslySetInnerHTML={{ __html: this.userText }}
+                ></div>
+                <br />
+                <button className="confirmSubmitBtn" data-dismiss="modal">
+                  сохранить
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div
+          className="modal fade"
           id="submitModal"
           tabIndex="-1"
           role="dialog"
           aria-hidden="true"
-          ref={this.ModalRef}
         >
-          <div className="modal-dialog">
+          <div className="modal-dialog modal-dialog-scrollable">
             <div className="modal-content">
               <div className="modal-header">
+                <h5>Опубликовать в Май</h5>
                 <button
                   type="button"
                   className="close"
@@ -243,7 +369,55 @@ class Main extends React.Component {
           </div>
         </div>
 
+        <div
+          className="modal fade"
+          id="infoModal"
+          tabIndex="-1"
+          role="dialog"
+          aria-hidden="true"
+        >
+          <div className="modal-dialog modal-dialog-scrollable">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5>Общая информация</h5>
+                <button
+                  type="button"
+                  className="close"
+                  data-dismiss="modal"
+                  aria-label="Close"
+                >
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div className="modal-body">
+                <div
+                  className="submissionText"
+                  dangerouslySetInnerHTML={{ __html: this.infoText }}
+                ></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div className="HeaderMain">
+          <button
+            className="headerMainBtn"
+            style={{ float: "left" }}
+            data-toggle="modal"
+            data-target="#userModal"
+          >
+            <i className="fas fa-user"></i>
+          </button>
+
+          <button
+            className="headerMainBtn"
+            style={{ float: "left" }}
+            data-toggle="modal"
+            data-target="#infoModal"
+          >
+            <i className="fas fa-info"></i>
+          </button>
+
           <NavLink to="/write">
             <button className="headerMainBtn" onClick={this.setCurrArticle}>
               <i className="fas fa-edit"></i>
@@ -253,9 +427,39 @@ class Main extends React.Component {
         </div>
 
         <div className="BodyMain">
-          <div className="row">
-            <div className="col">{posts1}</div>
-            <div className="col">{posts2}</div>
+          <div className="wrapper">
+            {posts.length ? (
+              <div className="row">
+                <div className="col">{posts1}</div>
+                <div className="col">{posts2}</div>
+              </div>
+            ) : (
+              <div className="textPage">нет неопубликованных статей</div>
+            )}
+
+            <br />
+            <div
+              className="supportCardView"
+              style={{
+                background: `url(https://64.media.tumblr.com/fb6257322a3e73e7aa7247ba2b678163/tumblr_pp3mmshJhz1xvjko7o1_1280.gifv) center/100% no-repeat`,
+              }}
+            >
+              <div className="supportCardBlackout">
+                <div className="supportCardTitle">Есть вопросы?</div>
+                <div className="supportCardText">
+                  Напиши нам в лс, если у тебя возникли какие-либо вопросы. Мы
+                  ответим тебе в ближайшее время.
+                </div>
+                <button className="supportCardBtn">
+                  <a
+                    style={{ textDecoration: "none", color: "#ffdef0" }}
+                    href="https://vk.com/im?sel=-160404048"
+                  >
+                    написать
+                  </a>
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>

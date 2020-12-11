@@ -1,7 +1,7 @@
 body {
   padding-bottom: 20px;
   overflow: hidden;
-  background-color: rgba(0, 0, 0, 0.9);
+  background-color: rgba(0, 0, 0, 0.92);
 }
 
 .col {
@@ -9,11 +9,18 @@ body {
   padding-left: 6px;
 }
 
+@media (min-width: 900px) {
+  .col {
+    padding-right: 11px;
+    padding-left: 11px;
+  }
+}
+
 .HeaderMain {
   position: fixed;
   z-index: 1;
   width: 100%;
-  height: 60px;
+  height: 55px;
   top: 0;
   text-align: right;
   background-color: rgb(8, 0, 5);
@@ -24,11 +31,21 @@ body {
 .BodyMain {
   position: fixed;
   width: 100%;
-  height: calc(100% - 0px);
+  margin-top: 60px;
+  height: calc(100% - 55px);
   overflow-x: hidden;
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
-  padding: 65px 20px 20px 20px;
+}
+
+.wrapper {
+  position: relative;
+  width: 100%;
+  padding: 5px 20px 30px 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: 750px;
+  overflow: hidden;
 }
 
 .articleView {
@@ -111,7 +128,7 @@ body {
   outline: none;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
 }
-.postBtn:active,
+.postBtn:hover,
 .postBtn:focus {
   cursor: pointer;
   background-color: rgba(0, 0, 0, 0.9);
@@ -141,8 +158,11 @@ body {
 .headerMainBtn {
   position: relative;
   display: inline-block;
+  min-width: 50px;
+  min-height: 35px;
   padding: 8px 15px;
-  font-size: 18px;
+  margin: 0 3px;
+  font-size: 15px;
   font-weight: 500;
   border-radius: 5px;
   border: 1.5px solid #ff77bf;
@@ -184,4 +204,122 @@ body {
   font-size: 18px;
   color:rgba(0, 0, 0, 0.9);
   font-weight: 500;
+}
+
+.userInput {
+  width: 90%;
+  display: inline-block;
+  padding: 3px 5px;
+  font-size: 20px;
+  font-weight: 500;
+  border-radius: 5px;
+  margin: 5px 10px;
+  border: 1.5px solid #ff60b5;
+  background-color: rgb(8, 0, 5);
+  color: #ffdef0;
+  box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.3);
+  outline: none;
+}
+
+.textPage {
+  position: relative;
+  width: 80%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 25px 0px;
+  background-color: rgb(8, 0, 5);
+  border-radius: 8px;
+  color: #ffdef0;
+  text-align: center;
+  font-size: 18px;
+}
+
+.supportCardView {
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  height: 200px;
+  margin: 25px 0;
+  border-radius: 10px;
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.8);
+  text-align: center;
+}
+
+@media (min-width: 900px) {
+  .supportCardView {
+    height: 250px;
+  }
+}
+
+.supportCardBlackout {
+  position: absolute;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  padding: 5px 20px;
+  border-radius: 10px;
+  top: 0;
+  left: 0;
+  text-align: center;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.supportCardTitle {
+  position: relative;
+  z-index: 1;
+  max-width: 100%;
+  margin-top: 10px;
+  font-weight: 500;
+  font-size: 24px;
+  color: #ffdef0;
+}
+
+@media (min-width: 900px) {
+  .supportCardTitle {
+    font-weight: 600;
+    font-size: 30px;
+  }
+}
+
+.supportCardText {
+  position: relative;
+  z-index: 1;
+  overflow-x: hidden;
+  overflow-y: auto;
+  max-height: 200px;
+  max-width: 100%;
+  margin-top: 5px;
+  font-size: 17px;
+  color: #ffdef0;
+}
+
+@media (min-width: 900px) {
+  .supportCardText {
+    font-size: 22px;
+  }
+}
+
+.supportCardBtn {
+  position: relative;
+  display: inline-block;
+  z-index: 1;
+  margin-top: 20px;
+  font-weight: 500;
+  font-size: 18px;
+  padding: 3px 15px;
+  border-radius: 6px;
+  border: 1.5px solid #ff60b5;
+  padding: 3px 20px;
+  color: #ffdef0;
+  background-color: rgb(8, 0, 5);
+  outline: none;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.8);
+}
+.supportCardBtn:active,
+.supportCardBtn:focus {
+  cursor: pointer;
+  background-color: rgb(8, 0, 5);
+  color: rgba(0, 0, 0, 0.9);
+  outline: none;
 }

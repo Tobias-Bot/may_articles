@@ -133,7 +133,7 @@ class WriteArticle extends React.Component {
 
         <div className="Header">
           <NavLink to="/">
-            <button className="HeaderBtn">
+            <button className="HeaderBtn" style={{ float: "left" }}>
               <i className="fas fa-home"></i>
             </button>
           </NavLink>
@@ -194,16 +194,18 @@ class WriteArticle extends React.Component {
         </div>
 
         <div className="Body">
-          <ArticlePage
-            currArticle={this.state.article}
-            articles={this.props.articles}
-            onProgress={this.setProgress}
-            onArticleSave={this.updateArticle}
-          />
+          <div className="wrapper">
+            <ArticlePage
+              currArticle={this.state.article}
+              articles={this.props.articles}
+              onProgress={this.setProgress}
+              onArticleSave={this.updateArticle}
+            />
+          </div>{" "}
         </div>
 
         <div className="Footer">
-          завершенность статьи: {Math.round(this.state.article.progress) + "%"}
+          объем статьи: {Math.round(this.state.article.progress) + "%"}
         </div>
       </div>
     );
