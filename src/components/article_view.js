@@ -10,7 +10,7 @@ class ArticleView extends React.Component {
       articles: [],
     };
 
-    this.submitProgress = 99;
+    this.submitProgress = 0;
 
     this.setCurrArticle = this.setCurrArticle.bind(this);
     this.deleteArticle = this.deleteArticle.bind(this);
@@ -80,6 +80,7 @@ class ArticleView extends React.Component {
           ) : (
             <button
               className="submitPostBtn"
+              style={{borderColor: article.color}}
               onClick={this.submitArticle}
               data-toggle="modal"
               data-target="#submitModal"

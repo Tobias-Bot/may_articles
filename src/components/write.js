@@ -112,7 +112,10 @@ class WriteArticle extends React.Component {
           aria-hidden="true"
         >
           <div className="modal-dialog">
-            <div className="modal-content">
+            <div
+              className="modal-content"
+              style={{ backgroundColor: "rgba(37, 37, 51)", color: "#d2d5ff" }}
+            >
               <div className="modal-header">
                 <h5 className="modal-title">Цвет статьи</h5>
                 <button
