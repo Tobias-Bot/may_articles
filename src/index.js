@@ -4,6 +4,9 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import * as firebase from "firebase/app";
+import bridge from '@vkontakte/vk-bridge';
+
+bridge.send('VKWebAppInit');
 
 var firebaseConfig = {
   apiKey: "AIzaSyDM4JCxS6_vYEoba-TjFTqVLVYp_Oc0agY",
